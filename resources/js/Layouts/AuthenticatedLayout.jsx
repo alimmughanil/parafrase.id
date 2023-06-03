@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import SideNavbar from "@/Components/SideNavbar";
+import SideNavbar from "@/Components/Navbar";
 import Sidebar from "@/Components/Sidebar";
 import { Head, usePage } from "@inertiajs/react";
 import VerifyEmail from "@/Components/VerifyEmail";
@@ -50,7 +50,7 @@ function AuthenticatedLayout({ title, children, open, setOpen, auth }) {
                     open={open}
                     title={title}
                     auth={auth}
-                    link="/admin/dashboard"
+                    link="/"
                 />
                 <div
                     className={`${

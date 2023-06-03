@@ -6,7 +6,7 @@ function SideNavbar({ ...props }) {
         <>
             {/* Navbar */}
             <div className="sticky top-0 left-0 z-[999]">
-                <div className="navbar max-w-full top-0 left-0 right-0 bg-base-100 shadow-lg">
+                <div className="top-0 left-0 right-0 max-w-full shadow navbar bg-base-100">
                     <div className="items-center navbar-start">
                         <div className="dropdown">
                             <label
@@ -24,19 +24,21 @@ function SideNavbar({ ...props }) {
                         </div>
                         <Link
                             href={props.Link}
-                            className={`normal-case font-semibold text-lg px-0 w-full whitespace-pre hover:font-bold ${props.open
-                                ? "hidden duration-300 sm:flex sm:navbar-start"
-                                : "navbar-start duration-300"
-                                }`}
+                            className={`normal-case font-semibold text-lg px-0 w-full whitespace-pre hover:font-bold ${
+                                props.open
+                                    ? "hidden duration-300 sm:flex sm:navbar-start"
+                                    : "navbar-start duration-300"
+                            }`}
                         >
                             {props.title}
                         </Link>
                     </div>
                     <div
-                        className={` ${props.open
-                            ? "hidden duration-500 sm:flex sm:navbar-end"
-                            : "navbar-end duration-500"
-                            }`}
+                        className={` ${
+                            props.open
+                                ? "hidden duration-500 sm:flex sm:navbar-end"
+                                : "navbar-end duration-500"
+                        }`}
                     >
                         <div className="mx-2">
                             <div className="dropdown dropdown-end">
