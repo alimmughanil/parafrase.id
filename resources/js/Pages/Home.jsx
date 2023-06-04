@@ -1,9 +1,8 @@
 import HomeLayout from "@/Layouts/HomeLayout";
 import { Link, Head, useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Welcome(props) {
-    const params = new URLSearchParams(location.search);
     const [result, setResult] = useState(null);
     const [textCount, setTextCount] = useState(0);
     const [message, setMessage] = useState(null);
@@ -13,9 +12,15 @@ export default function Welcome(props) {
     });
 
     const { data, setData, post, errors, processing } = useForm({
-        type: params.get("type") ? params.get("type") : "paraphrase",
+        type: "paraphrase",
         text: "",
     });
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        if (params.get("type")) {
+            setData("type", params.get("type"));
+        }
+    }, []);
 
     const handleTranslateChange = () => {
         if (translate.from == "Bahasa Indonesia") {
@@ -58,7 +63,7 @@ export default function Welcome(props) {
 
     return (
         <>
-            <Head title="Parafrase ID" />
+            <Head title="Beranda" />
             <HomeLayout title={props.title} auth={props.auth}>
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="py-4">Selamat datang di Parafrase ID</p>
