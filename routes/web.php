@@ -23,7 +23,7 @@ Route::get('/', HomeController::class)->name('home');
 
 Route::get('/dashboard', DashboardController::class)->name('dashboard')->middleware('auth');
 
-Route::resource('/prompt', PromptController::class)->only('store');
+Route::resource('/prompt', PromptController::class)->only('index', 'store');
 
 Route::middleware('auth', 'isAdmin')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

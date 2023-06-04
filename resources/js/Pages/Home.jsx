@@ -6,19 +6,45 @@ export default function Welcome(props) {
     const params = new URLSearchParams(location.search);
     const [result, setResult] = useState(null);
     const [message, setMessage] = useState(null);
+    const [translate, setTranslate] = useState({
+        from: "Bahasa Indonesia",
+        to: "Bahasa Inggris",
+    });
 
     const { data, setData, post, errors, processing } = useForm({
         type: params.get("type") ? params.get("type") : "paraphrase",
         text: "",
     });
 
+    const handleTranslateChange = () => {
+        if (translate.from == "Bahasa Indonesia") {
+            setTranslate({
+                ...translate,
+                from: "Bahasa Inggris",
+                to: "Bahasa Indonesia",
+            });
+        } else {
+            setTranslate({
+                ...translate,
+                from: "Bahasa Indonesia",
+                to: "Bahasa Inggris",
+            });
+        }
+        if (result && data.text) {
+            setData("text", result.choices[0].text.slice(1).trim());
+            setResult(null);
+        }
+    };
+
     const handleSubmit = () => {
         setResult(null);
         setMessage(null);
+        data.type == "translate" ? (data.translate = translate) : null;
+
         post("/prompt", {
             onSuccess: ({ props }) => {
                 if (props.flash.message) return setMessage(props.flash.message);
-                setResult(JSON.parse(props.result));
+                setResult(JSON.parse(props.data.result));
             },
         });
     };
@@ -29,7 +55,7 @@ export default function Welcome(props) {
             <HomeLayout title={props.title} auth={props.auth}>
                 <div className="flex flex-col items-center justify-center gap-2">
                     <p className="py-4">Selamat datang di Parafrase ID</p>
-                    <div className="flex gap-2 overflow-auto whitespace-pre scrollbar-hide max-w-xs md:max-w-full">
+                    <div className="flex max-w-xs gap-2 overflow-auto whitespace-pre scrollbar-hide md:max-w-full">
                         <button
                             onClick={() => setData("type", "paraphrase")}
                             className={`badge badge-primary ${
@@ -61,9 +87,9 @@ export default function Welcome(props) {
                             Rangkuman
                         </button>
                         <button
-                            onClick={() => setData("type", "translateId")}
+                            onClick={() => setData("type", "translate")}
                             className={`badge badge-primary ${
-                                data.type != "translateId"
+                                data.type != "translate"
                                     ? "badge-outline"
                                     : null
                             }`}
@@ -72,15 +98,28 @@ export default function Welcome(props) {
                         </button>
                     </div>
                     {message ? (
-                        <div className="badge badge-error badge-outline mt-2">
+                        <div className="mt-2 badge badge-error badge-outline">
                             {message}
                         </div>
                     ) : null}
-                    <div className="flex flex-col md:flex-row gap-4 w-full items-start py-4 px-4">
-                        <div className="form-control w-full">
+                    {data.type == "translate" ? (
+                        <div className="flex items-center gap-4 px-4 pt-2 justify-evenly">
+                            <h3>{translate.from}</h3>
+                            <button
+                                onClick={handleTranslateChange}
+                                className="btn btn-ghost btn-sm"
+                            >
+                                <i className="fa-solid fa-arrow-right-arrow-left"></i>
+                            </button>
+                            <h3>{translate.to}</h3>
+                        </div>
+                    ) : null}
+
+                    <div className="flex flex-col items-start w-full gap-4 px-4 py-2 md:flex-row">
+                        <div className="w-full form-control">
                             <textarea
                                 className={`
-                                    textarea textarea-bordered w-full h-40 
+                                    textarea textarea-bordered w-full h-40 md:min-h-[20rem] 
                                     ${errors.text ? "textarea-error" : null}
                                 `}
                                 placeholder="Tuliskan teks disini"
@@ -106,9 +145,9 @@ export default function Welcome(props) {
                         >
                             Proses
                         </button>
-                        <div className="form-control w-full">
+                        <div className="w-full form-control">
                             <textarea
-                                className={`textarea textarea-bordered w-full h-40 ${
+                                className={`textarea textarea-bordered w-full h-40 md:min-h-[20rem] ${
                                     message ? "textarea-error" : null
                                 }`}
                                 placeholder={

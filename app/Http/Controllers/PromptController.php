@@ -8,6 +8,10 @@ use Inertia\Inertia;
 
 class PromptController extends Controller
 {
+    public function index()
+    {
+        return redirect('/');
+    }
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -15,22 +19,24 @@ class PromptController extends Controller
             'text' => ['required'],
         ]);
 
+        $filteredText = $request->text;
+
         $token = env("CHATGPT_SECRET_KEY");
         $baseUrl = "https://api.openai.com";
         $prompt = null;
 
         switch ($request->type) {
             case 'paraphrase':
-                $prompt = "buatkan parafrase dari kalimat: " . $request->text;
+                $prompt = "Tulis ulang dan buatkan parafrase dari kalimat: " . $filteredText;
                 break;
             case 'correction':
-                $prompt = "Tulis ulang dan perbaiki tata bahasa sesuai dengan PUEBI pada paragraf: " . $request->text;
+                $prompt = "Mari bermain peran, kamu adalah seorang ahli Bahasa Indonesia, tolong perbaiki tata tulis sesuai dengan PUEBI pada kalimat: " . $filteredText;
                 break;
             case 'summerize':
-                $prompt = "buatkan ringkasan kalimat pada paragraf: " . $request->text;
+                $prompt = "buatkan ringkasan kalimat pada paragraf: " . $filteredText;
                 break;
-            case 'translateId':
-                $prompt = "terjemahankan bahasa indonesia ke bahasa inggris pada kalimat: " . $request->text;
+            case 'translate':
+                $prompt = "Tolong terjemahankan " . $request->translate['from'] . " ke " . $request->translate['to'] . " pada kalimat: " . $filteredText;
                 break;
         }
 
@@ -54,8 +60,6 @@ class PromptController extends Controller
         ]);
         $res = $req->getBody()->getContents();
 
-        return Inertia::render('Home', [
-            'result' => $res
-        ]);
+        return redirect('/')->with('result', $res);
     }
 }
