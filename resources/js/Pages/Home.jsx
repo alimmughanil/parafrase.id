@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function Welcome(props) {
     const params = new URLSearchParams(location.search);
     const [result, setResult] = useState(null);
+    const [textCount, setTextCount] = useState(0);
     const [message, setMessage] = useState(null);
     const [translate, setTranslate] = useState({
         from: "Bahasa Indonesia",
@@ -34,6 +35,12 @@ export default function Welcome(props) {
             setData("text", result.choices[0].text.slice(1).trim());
             setResult(null);
         }
+    };
+
+    const handleDataChange = (e) => {
+        const filteredText = e.target.value.substring(0, 2048);
+        setData("text", filteredText);
+        setTextCount(filteredText.length);
     };
 
     const handleSubmit = () => {
@@ -124,17 +131,18 @@ export default function Welcome(props) {
                                 `}
                                 placeholder="Tuliskan teks disini"
                                 value={data.text}
-                                onChange={(e) =>
-                                    setData("text", e.target.value)
-                                }
+                                onChange={handleDataChange}
                             ></textarea>
-                            {errors.text ? (
-                                <label className="label">
+                            <label className="label">
+                                {errors.text ? (
                                     <span className="label-text-alt text-error">
                                         * {errors.text}
                                     </span>
-                                </label>
-                            ) : null}
+                                ) : null}
+                                <span className="label-text-alt">
+                                    {textCount}/2048
+                                </span>
+                            </label>
                         </div>
                         <button
                             onClick={handleSubmit}
