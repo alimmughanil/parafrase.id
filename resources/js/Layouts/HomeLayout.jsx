@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import Navbar from "@/Components/Navbar";
 import { Head, usePage } from "@inertiajs/react";
+import Sidebar from "@/Components/Sidebar";
 
 function HomeLayout({ title, children }) {
     const flashMessage = usePage().props.flash.message;
@@ -20,39 +21,46 @@ function HomeLayout({ title, children }) {
         {
             title: "Parafrase",
             src: "fas fa-clipboard",
-            link: "/",
+            link: "/?type=paraphrase",
         },
         {
             title: "Rangkuman",
             src: "fas fa-clipboard",
-            link: "/summerization",
+            link: "/?type=correction",
         },
         {
             title: "Perbaikan",
             src: "fas fa-clipboard",
-            link: "/",
+            link: "/?type=correction",
         },
         {
             title: "Terjemahkan",
             src: "fas fa-clipboard",
-            link: "/",
+            link: "/?type=translate",
         },
     ];
 
     return (
         <>
             <Head title={title} />
-            <div className={`min-h-screen flex-1`}>
+            <div className={`flex-1`}>
                 <Navbar
                     setOpen={setOpen}
                     open={open}
                     title={title}
                     link="/dashboard"
+                    menu={sidebarMenu}
                 />
                 <div
-                    className={`px-4 py-2 sm:px-6 sm:py-4 relative w-screen overflow-hidden sm:w-full`}
+                    className={`flex flex-row w-full`}
                 >
-                    {children}
+                    <Sidebar
+                        menu={sidebarMenu}
+                        open={open}
+                    />
+                    <div className={`bg-gray-200 ${open ? "hidden sm:flex sm:place-items-start w-full" : "flex-1"}`}>
+                        {children}
+                    </div>
                 </div>
             </div>
         </>

@@ -65,23 +65,69 @@ export default function Welcome(props) {
         <>
             <Head title="Beranda" />
             <HomeLayout title={props.title} auth={props.auth}>
-                <div className=" flex flex-col justify-center p-4 sm:p-8 w-full">
-                    <p className="text-center capitalize text-xl font-bold pt-2 pb-4">{data.type}</p>
-                    <div className="flex flex-col items-start justify-between w-full gap-4 md:flex-row">
-                        <div className="flex gap-2">
-                            <button className="bg-gray-50 rounded-t-lg px-4">Indonesia</button>
-                            <button className="bg-gray-200">English</button>
-                        </div>
-                        <div className={`${data.type == "translate" ? "flex gap-2" : "hidden"}`}>
-                            <button className="bg-gray-200">Indonesia</button>
-                            <button className="bg-gray-50 rounded-t-lg px-4">English</button>
-                        </div>
+                <div className="flex flex-col items-center justify-center gap-2">
+                    <p className="py-4">Selamat datang di Parafrase ID</p>
+                    <div className="flex max-w-xs gap-2 overflow-auto whitespace-pre scrollbar-hide md:max-w-full">
+                        <button
+                            onClick={() => setData("type", "paraphrase")}
+                            className={`badge badge-primary ${data.type != "paraphrase"
+                                    ? "badge-outline"
+                                    : null
+                                }`}
+                        >
+                            Parafrase
+                        </button>
+                        <button
+                            onClick={() => setData("type", "correction")}
+                            className={`badge badge-primary ${data.type != "correction"
+                                    ? "badge-outline"
+                                    : null
+                                }`}
+                        >
+                            Koreksi
+                        </button>
+                        <button
+                            onClick={() => setData("type", "summerize")}
+                            className={`badge badge-primary ${data.type != "summerize"
+                                    ? "badge-outline"
+                                    : null
+                                }`}
+                        >
+                            Rangkuman
+                        </button>
+                        <button
+                            onClick={() => setData("type", "translate")}
+                            className={`badge badge-primary ${data.type != "translate"
+                                    ? "badge-outline"
+                                    : null
+                                }`}
+                        >
+                            Terjemahkan
+                        </button>
                     </div>
-                    <div className="flex flex-col items-start w-full gap-4 md:flex-row">
-                        <div className="w-full form-control relative">
+                    {message ? (
+                        <div className="mt-2 badge badge-error badge-outline">
+                            {message}
+                        </div>
+                    ) : null}
+                    {data.type == "translate" ? (
+                        <div className="flex items-center gap-4 px-4 pt-2 justify-evenly">
+                            <h3>{translate.from}</h3>
+                            <button
+                                onClick={handleTranslateChange}
+                                className="btn btn-ghost btn-sm"
+                            >
+                                <i className="fa-solid fa-arrow-right-arrow-left"></i>
+                            </button>
+                            <h3>{translate.to}</h3>
+                        </div>
+                    ) : null}
+
+                    <div className="flex flex-col items-start w-full gap-4 px-4 py-2 md:flex-row">
+                        <div className="w-full form-control">
                             <textarea
                                 className={`
-                                    textarea w-full rounded-ss-none min-h-[16rem] md:min-h-[20rem] 
+                                    textarea textarea-bordered w-full h-40 md:min-h-[20rem] 
                                     ${errors.text ? "textarea-error" : null}
                                 `}
                                 placeholder="Tuliskan teks disini"
@@ -98,19 +144,18 @@ export default function Welcome(props) {
                                     {textCount}/2048
                                 </span>
                             </label>
-                            <button
-                                onClick={handleSubmit}
-                                disabled={processing}
-                                className={`btn btn-primary btn-sm self-center absolute bottom-10 right-2 ${processing ? "loading" : null
-                                    }`}
-                            >
-                                Proses
-                            </button>
-
                         </div>
+                        <button
+                            onClick={handleSubmit}
+                            disabled={processing}
+                            className={`btn btn-primary btn-sm self-center ${processing ? "loading" : null
+                                }`}
+                        >
+                            Proses
+                        </button>
                         <div className="w-full form-control">
                             <textarea
-                                className={`textarea w-full ${data.type == "translate" ? "rounded-se-none" : ""} min-h-[16rem] md:min-h-[20rem] ${message ? "textarea-error" : null
+                                className={`textarea textarea-bordered w-full h-40 md:min-h-[20rem] ${message ? "textarea-error" : null
                                     }`}
                                 placeholder={
                                     processing

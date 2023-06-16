@@ -6,8 +6,11 @@ function Navbar({ ...props }) {
     return (
         <>
             <div className="sticky top-0 left-0 z-[999]">
-                <div className="max-w-full shadow navbar bg-base-100 px-4 justify-center md:px-8 lg:px-16">
-                    <div className="items-center navbar-start">
+                <div className="max-w-full shadow navbar bg-base-100 px-4 justify-center">
+                    <div className="items-center navbar-start gap-2">
+                        <button onClick={() => props.setOpen((state) => !state)}>
+                            <i className="fas fa-bars"></i>
+                        </button>
                         <Link
                             href="/"
                             className={`normal-case font-semibold text-lg px-0 w-full whitespace-pre hover:font-bold navbar-start duration-300`}
