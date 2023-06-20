@@ -14,6 +14,7 @@ export default function Welcome(props) {
     const { data, setData, post, errors, processing } = useForm({
         type: "paraphrase",
         text: "",
+        language: 'id',
     });
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -22,18 +23,21 @@ export default function Welcome(props) {
         }
     }, []);
 
-    const handleTranslateChange = () => {
-        if (translate.from == "Bahasa Indonesia") {
-            setTranslate({
-                ...translate,
-                from: "Bahasa Inggris",
-                to: "Bahasa Indonesia",
-            });
-        } else {
+    const handleChangeTranslateFrom = (e) => {
+        handleChangeLanguage(e)
+
+        if (e.target.value == "id") {
             setTranslate({
                 ...translate,
                 from: "Bahasa Indonesia",
                 to: "Bahasa Inggris",
+            });
+
+        } else {
+            setTranslate({
+                ...translate,
+                from: "Bahasa Inggris",
+                to: "Bahasa Indonesia",
             });
         }
         if (result && data.text) {
@@ -41,6 +45,10 @@ export default function Welcome(props) {
             setResult(null);
         }
     };
+
+    const handleChangeLanguage = (e) => {
+        setData('language', e.target.value)
+    }
 
     const handleDataChange = (e) => {
         const filteredText = e.target.value.substring(0, 2048);
@@ -69,12 +77,12 @@ export default function Welcome(props) {
                     <p className="text-center capitalize text-xl font-bold pt-2 pb-4">{data.type}</p>
                     <div className="flex flex-col items-start justify-between w-full gap-4 md:flex-row">
                         <div className="flex gap-2">
-                            <button className="bg-gray-50 rounded-t-lg px-4">Indonesia</button>
-                            <button className="bg-gray-200">English</button>
+                            <button value='id' onClick={data.type == "translate" ? handleChangeTranslateFrom : handleChangeLanguage} className={`${data.language == 'id' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200 px-2'}`}>Indonesia</button>
+                            <button value='en' onClick={data.type == "translate" ? handleChangeTranslateFrom : handleChangeLanguage} className={`${data.language == 'en' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200'}`}>English</button>
                         </div>
-                        <div className={`${data.type == "translate" ? "flex gap-2" : "hidden"}`}>
-                            <button className="bg-gray-200">Indonesia</button>
-                            <button className="bg-gray-50 rounded-t-lg px-4">English</button>
+                        <div className={`${data.type == "translate" ? "md:flex gap-2 hidden" : "hidden"}`}>
+                            <button value='id' className={`${translate.to == 'Bahasa Indonesia' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200 px-2'}`}>Indonesia</button>
+                            <button value='en' className={`${translate.to == 'Bahasa Inggris' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200'}`}>English</button>
                         </div>
                     </div>
                     <div className="flex flex-col items-start w-full gap-4 md:flex-row">
@@ -108,6 +116,11 @@ export default function Welcome(props) {
                             </button>
 
                         </div>
+                        <div className={`${data.type == "translate" ? "flex gap-2 md:hidden" : "hidden"}`}>
+                            <button value='id' className={`${translate.to == 'Bahasa Indonesia' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200 px-2'}`}>Indonesia</button>
+                            <button value='en' className={`${translate.to == 'Bahasa Inggris' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200'}`}>English</button>
+                        </div>
+
                         <div className="w-full form-control">
                             <textarea
                                 className={`textarea w-full ${data.type == "translate" ? "rounded-se-none" : ""} min-h-[16rem] md:min-h-[20rem] ${message ? "textarea-error" : null

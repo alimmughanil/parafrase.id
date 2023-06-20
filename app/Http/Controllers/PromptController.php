@@ -17,9 +17,12 @@ class PromptController extends Controller
         $validated = $request->validate([
             'type' => ['required'],
             'text' => ['required'],
+            'language' => ['required'],
         ]);
 
         $filteredText = $request->text;
+        // $validated['language'] digunakan untuk bahasa prompt
+        $language = $validated['language'] == 'id' ? 'indonesia' : 'inggris';
 
         $token = env("CHATGPT_SECRET_KEY");
         $baseUrl = "https://api.openai.com";
