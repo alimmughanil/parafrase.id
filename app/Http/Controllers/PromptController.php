@@ -28,6 +28,8 @@ class PromptController extends Controller
         $baseUrl = "https://api.openai.com";
         $prompt = null;
 
+        dd($request->type);
+
         switch ($request->type) {
             case 'paraphrase':
                 $prompt = "Tulis ulang dan buatkan parafrase dari kalimat: " . $filteredText;

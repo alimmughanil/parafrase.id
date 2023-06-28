@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('prompt_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->timestamp('date_time');
-            $table->longText('description')->nullable();
-            $table->enum('status', ['active', 'nonactive'])->default('active');
+            $table->foreignUuid('user_id')->nullable();
+            $table->string('ip_address');
+            $table->longText('user_agent')->nullable();
+            $table->json('device')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('prompt_histories');
     }
 };
