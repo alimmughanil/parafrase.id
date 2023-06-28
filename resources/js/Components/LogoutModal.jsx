@@ -19,18 +19,13 @@ function LogoutModal() {
                         Apakah anda yakin ingin keluar?
                     </h3>
                     <div className="modal-action">
-                        <a
-                            href="#"
-                            className="btn btn-sm btn-primary btn-outline"
-                        >
+                        <a href="#" className="btn btn-outline">
                             Tidak
                         </a>
                         <button
                             onClick={submit}
                             disabled={processing}
-                            className={`btn btn-sm btn-primary ${
-                                processing && "loading"
-                            }`}
+                            className="btn"
                         >
                             Ya
                         </button>

@@ -21,7 +21,7 @@ use App\Http\Controllers\ParaphraseController;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::get('/dashboard', DashboardController::class)->name('dashboard')->middleware('auth');
+Route::get('/dashboard', DashboardController::class)->name('dashboard')->middleware('auth', 'isAdmin');
 
 Route::resource('/prompt', PromptController::class)->only('index', 'store');
 

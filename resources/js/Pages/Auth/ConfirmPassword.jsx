@@ -17,6 +17,10 @@ export default function ConfirmPassword() {
         };
     }, []);
 
+    const handleOnChange = (event) => {
+        setData(event.target.name, event.target.value);
+    };
+
     const submit = (e) => {
         e.preventDefault();
 
@@ -27,7 +31,7 @@ export default function ConfirmPassword() {
         <GuestLayout>
             <Head title="Confirm Password" />
 
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="mb-4 text-sm text-gray-600">
                 This is a secure area of the application. Please confirm your password before continuing.
             </div>
 
@@ -42,16 +46,16 @@ export default function ConfirmPassword() {
                         value={data.password}
                         className="mt-1 block w-full"
                         isFocused={true}
-                        onChange={(e) => setData('password', e.target.value)}
+                        onChange={handleOnChange}
                     />
 
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ml-4" disabled={processing}>
+                    <button className="btn btn-sm btn-primary" disabled={processing}>
                         Confirm
-                    </PrimaryButton>
+                    </button>
                 </div>
             </form>
         </GuestLayout>

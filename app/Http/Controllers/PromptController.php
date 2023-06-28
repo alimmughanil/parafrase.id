@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use App\Models\Prompt;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Models\PromptHistory;
+use App\Http\Controllers\PromptHistoryController;
 
 class PromptController extends Controller
 {
+    public function __construct(PromptHistoryController $promptHistoryController)
+    {
+        $this->promptHistoryController = $promptHistoryController;
+    }
     public function index()
     {
         return redirect('/');
@@ -20,51 +27,48 @@ class PromptController extends Controller
             'language' => ['required'],
         ]);
 
-        $filteredText = $request->text;
-        // $validated['language'] digunakan untuk bahasa prompt
-        $language = $validated['language'] == 'id' ? 'indonesia' : 'inggris';
+        try {
+            $promptHistory = $this->promptHistoryController->get($request);
+            if (!$promptHistory->isEmpty() && !auth()->check()) return redirect('/login')->with('message', 'Anda telah mencapai batas pemakaian, silahkan masuk menggunakan akun anda terlebih dahulu');
+            if (count($promptHistory) >= auth()->user()->limit) return redirect('/')->with('message', 'Anda telah mencapai batas pemakaian akun basic, silahkan upgrade akun anda terlebih dahulu');
 
-        $token = env("CHATGPT_SECRET_KEY");
-        $baseUrl = "https://api.openai.com";
-        $prompt = null;
+            $prompt = Prompt::where('type', $request->type)->where('lang', $request->language)->first();
+            if (!$prompt) return redirect('/')->with('message', 'Gagal membuat prompt');
 
-        dd($request->type);
+            $additional = json_decode($prompt->additional);
+            $instruction = $prompt->instruction;
 
-        switch ($request->type) {
-            case 'paraphrase':
-                $prompt = "Tulis ulang dan buatkan parafrase dari kalimat: " . $filteredText;
-                break;
-            case 'correction':
-                $prompt = "Mari bermain peran, kamu adalah seorang ahli Bahasa Indonesia, tolong perbaiki tata tulis sesuai dengan PUEBI pada kalimat: " . $filteredText;
-                break;
-            case 'summerize':
-                $prompt = "buatkan ringkasan kalimat pada paragraf: " . $filteredText;
-                break;
-            case 'translate':
-                $prompt = "Tolong terjemahankan " . $request->translate['from'] . " ke " . $request->translate['to'] . " pada kalimat: " . $filteredText;
-                break;
+            if ($request->type == "translate") {
+                $instruction .= ' ' . $additional->conjunction->to;
+                $instruction .= ' ' . $additional->translate->to;
+            }
+            $instruction .= ': ';
+            $instruction .= $request->text;
+
+            $token = env("CHATGPT_SECRET_KEY");
+            $baseUrl = "https://api.openai.com";
+            $client = new Client(['base_uri' => $baseUrl]);
+            $req = $client->post('/v1/completions', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $token
+                ],
+                'json' => [
+                    "model" => $prompt->model,
+                    "prompt" => $instruction,
+                    "max_tokens" => floatval($prompt->max_tokens),
+                    "temperature" => floatval($prompt->temperature),
+                    "top_p" => floatval($prompt->top_p),
+                    "frequency_penalty" => floatval($prompt->frequency_penalty),
+                    "presence_penalty" => floatval($prompt->presence_penalty)
+                ]
+            ]);
+            $res = $req->getBody()->getContents();
+
+            $this->promptHistoryController->store($request);
+
+            return redirect('/')->with('result', $res);
+        } catch (\Throwable $th) {
+            return redirect('/')->with('message', 'Gagal membuat prompt');
         }
-
-        if (!$prompt) return redirect('/')->with('message', 'Gagal membuat prompt');
-
-        $client = new Client(['base_uri' => $baseUrl]);
-
-        $req = $client->post('/v1/completions', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $token
-            ],
-            'json' => [
-                "model" => "text-davinci-003",
-                "prompt" => $prompt,
-                "max_tokens" => 2048,
-                "temperature" => 0,
-                "top_p" => 1.0,
-                "frequency_penalty" => 0.0,
-                "presence_penalty" => 0.0
-            ]
-        ]);
-        $res = $req->getBody()->getContents();
-
-        return redirect('/')->with('result', $res);
     }
 }

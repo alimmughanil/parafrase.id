@@ -26,7 +26,7 @@ function HomeLayout({ title, children }) {
         {
             title: "Rangkuman",
             src: "fas fa-clipboard",
-            link: "/?type=correction",
+            link: "/?type=summerize",
         },
         {
             title: "Perbaikan",

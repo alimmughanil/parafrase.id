@@ -31,25 +31,25 @@ class DatabaseSeeder extends Seeder
             'type' => 'paraphrase',
             'lang' => 'id',
             'level' => 'low',
-            'instruction' => 'Tulis ulang dan buatkan parafrase dari kalimat:'
+            'instruction' => 'Parafrase ini untuk siswa kelas dua'
         ]);
         \App\Models\Prompt::create([
             'type' => 'correction',
             'lang' => 'id',
             'level' => 'low',
-            'instruction' => 'Jika kamu adalah ahli bahasa indonesia, perbaiki tata tulis sesuai dengan PUEBI pada kalimat: '
+            'instruction' => 'Perbaiki ini ke bahasa Indonesia standar berdasarkan PUEBI'
         ]);
         \App\Models\Prompt::create([
             'type' => 'summerize',
             'lang' => 'id',
             'level' => 'low',
-            'instruction' => 'Buatkan ringkasan kalimat pada paragraf:'
+            'instruction' => 'Ringkaslah ini untuk siswa kelas dua'
         ]);
         \App\Models\Prompt::create([
             'type' => 'translate',
             'lang' => 'id',
             'level' => 'low',
-            'instruction' => 'Terjemahkan kalimat berikut ',
+            'instruction' => 'Terjemahkan ini ',
             'additional' => json_encode([
                 'translate' => [
                     'from' => 'bahasa indonesia',
@@ -58,6 +58,41 @@ class DatabaseSeeder extends Seeder
                 'conjunction' => [
                     'from' => 'dari',
                     'to' => 'ke'
+                ]
+            ])
+        ]);
+
+        \App\Models\Prompt::create([
+            'type' => 'paraphrase',
+            'lang' => 'en',
+            'level' => 'low',
+            'instruction' => 'Paraphrase this for a second-grade student'
+        ]);
+        \App\Models\Prompt::create([
+            'type' => 'correction',
+            'lang' => 'en',
+            'level' => 'low',
+            'instruction' => 'Correct this to standard English'
+        ]);
+        \App\Models\Prompt::create([
+            'type' => 'summerize',
+            'lang' => 'en',
+            'level' => 'low',
+            'instruction' => 'Summarize this for a second-grade student'
+        ]);
+        \App\Models\Prompt::create([
+            'type' => 'translate',
+            'lang' => 'en',
+            'level' => 'low',
+            'instruction' => 'Translate this',
+            'additional' => json_encode([
+                'translate' => [
+                    'from' => 'english',
+                    'to' => 'indonesia',
+                ],
+                'conjunction' => [
+                    'from' => 'from',
+                    'to' => 'into'
                 ]
             ])
         ]);

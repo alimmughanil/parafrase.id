@@ -1,5 +1,5 @@
 import HomeLayout from "@/Layouts/HomeLayout";
-import { Link, Head, useForm } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
 export default function Welcome(props) {
@@ -7,10 +7,9 @@ export default function Welcome(props) {
     const [textCount, setTextCount] = useState(0);
     const [message, setMessage] = useState(null);
     const [translate, setTranslate] = useState({
-        from: "Bahasa Indonesia",
-        to: "Bahasa Inggris",
+        from: "id",
+        to: "en",
     });
-
     const { data, setData, post, errors, processing } = useForm({
         type: "paraphrase",
         text: "",
@@ -18,32 +17,35 @@ export default function Welcome(props) {
     });
     useEffect(() => {
         const params = new URLSearchParams(location.search);
+        const validTypes = ['paraphrase', 'summerize', 'correction', 'translate']
+
         if (params.get("type")) {
-            setData("type", params.get("type"));
+            const validatedType = validTypes.includes(params.get("type"))
+            const type = validatedType ? params.get("type") : 'paraphrase'
+            setData("type", type);
         }
     }, []);
 
     const handleChangeTranslateFrom = (e) => {
-        handleChangeLanguage(e)
-
         if (e.target.value == "id") {
             setTranslate({
                 ...translate,
-                from: "Bahasa Indonesia",
-                to: "Bahasa Inggris",
+                from: "id",
+                to: "en",
             });
 
         } else {
             setTranslate({
                 ...translate,
-                from: "Bahasa Inggris",
-                to: "Bahasa Indonesia",
+                from: "en",
+                to: "id",
             });
         }
         if (result && data.text) {
             setData("text", result.choices[0].text.slice(1).trim());
             setResult(null);
         }
+        handleChangeLanguage(e)
     };
 
     const handleChangeLanguage = (e) => {
@@ -75,14 +77,18 @@ export default function Welcome(props) {
             <HomeLayout title={props.title} auth={props.auth}>
                 <div className=" flex flex-col justify-center p-4 sm:p-8 w-full">
                     <p className="text-center capitalize text-xl font-bold pt-2 pb-4">{data.type}</p>
+                    {props.flash.message
+                        ? <div className="badge badge-error mx-auto mb-4 h-full text-center text-white">{props.flash.message}</div>
+                        : null
+                    }
                     <div className="flex flex-col items-start justify-between w-full gap-4 md:flex-row">
                         <div className="flex gap-2">
                             <button value='id' onClick={data.type == "translate" ? handleChangeTranslateFrom : handleChangeLanguage} className={`${data.language == 'id' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200 px-2'}`}>Indonesia</button>
                             <button value='en' onClick={data.type == "translate" ? handleChangeTranslateFrom : handleChangeLanguage} className={`${data.language == 'en' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200'}`}>English</button>
                         </div>
                         <div className={`${data.type == "translate" ? "md:flex gap-2 hidden" : "hidden"}`}>
-                            <button value='id' className={`${translate.to == 'Bahasa Indonesia' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200 px-2'}`}>Indonesia</button>
-                            <button value='en' className={`${translate.to == 'Bahasa Inggris' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200'}`}>English</button>
+                            <button value='id' className={`${translate.to == 'id' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200 px-2'}`}>Indonesia</button>
+                            <button value='en' className={`${translate.to == 'en' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200'}`}>English</button>
                         </div>
                     </div>
                     <div className="flex flex-col items-start w-full gap-4 md:flex-row">
@@ -117,8 +123,8 @@ export default function Welcome(props) {
 
                         </div>
                         <div className={`${data.type == "translate" ? "flex gap-2 md:hidden" : "hidden"}`}>
-                            <button value='id' className={`${translate.to == 'Bahasa Indonesia' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200 px-2'}`}>Indonesia</button>
-                            <button value='en' className={`${translate.to == 'Bahasa Inggris' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200'}`}>English</button>
+                            <button value='id' className={`${translate.to == 'id' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200 px-2'}`}>Indonesia</button>
+                            <button value='en' className={`${translate.to == 'en' ? 'bg-gray-50 rounded-t-lg px-4' : 'bg-gray-200'}`}>English</button>
                         </div>
 
                         <div className="w-full form-control">
