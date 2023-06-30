@@ -1,41 +1,49 @@
-import { useEffect } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { useEffect } from "react";
+import GuestLayout from "@/Layouts/GuestLayout";
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import PrimaryButton from "@/Components/PrimaryButton";
+import TextInput from "@/Components/TextInput";
+import { Head, Link, useForm } from "@inertiajs/react";
+import GoogleAuthButton from "@/Components/GoogleAuthButton";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
     });
 
     useEffect(() => {
         return () => {
-            reset('password', 'password_confirmation');
+            reset("password", "password_confirmation");
         };
     }, []);
 
     const handleOnChange = (event) => {
-        setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
+        setData(
+            event.target.name,
+            event.target.type === "checkbox"
+                ? event.target.checked
+                : event.target.value
+        );
     };
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('register'));
+        post(route("register"));
     };
 
     return (
         <GuestLayout>
             <Head title="Register" />
 
-            <p className='text-center text-lg font-bold my-4'>Create New Account</p>
-
+            <p className="my-4 text-lg font-bold text-center">
+                Create New Account
+            </p>
+            <GoogleAuthButton />
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
@@ -89,29 +97,45 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
+                    <InputLabel
+                        htmlFor="password_confirmation"
+                        value="Confirm Password"
+                    />
 
                     <TextInput
                         id="password_confirmation"
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="block w-full" How are you
+                        className="block w-full"
+                        How
+                        are
+                        you
                         autoComplete="new-password"
                         onChange={handleOnChange}
                         required
                     />
 
-                    <InputError message={errors.password_confirmation} className="mt-2" />
+                    <InputError
+                        message={errors.password_confirmation}
+                        className="mt-2"
+                    />
                 </div>
 
-                <div className="flex flex-col my-4 gap-4">
+                <div className="flex flex-col gap-4 my-4">
                     <div className="flex flex-col">
-                        <button className="btn btn-sm btn-primary" disabled={processing}>
+                        <button
+                            className="btn btn-sm btn-primary"
+                            disabled={processing}
+                        >
                             Register
                         </button>
                         <div className="divider">or</div>
-                        <Link href='/login' className="btn btn-sm btn-primary btn-outline w-max mx-auto" disabled={processing}>
+                        <Link
+                            href="/login"
+                            className="mx-auto btn btn-sm btn-primary btn-outline w-max"
+                            disabled={processing}
+                        >
                             Login to your account
                         </Link>
                     </div>

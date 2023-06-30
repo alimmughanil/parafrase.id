@@ -1,14 +1,17 @@
 import { React } from "react";
 import { Link, usePage } from "@inertiajs/react";
+import UpgradeButton from "./UpgradeButton";
 
 function Navbar({ ...props }) {
     const user = usePage().props.auth.user;
     return (
         <>
             <div className="sticky top-0 left-0 z-[999]">
-                <div className="max-w-full shadow navbar bg-base-100 px-4 justify-center">
-                    <div className="items-center navbar-start gap-2">
-                        <button onClick={() => props.setOpen((state) => !state)}>
+                <div className="justify-center max-w-full px-4 shadow navbar bg-base-100">
+                    <div className="items-center gap-2 navbar-start">
+                        <button
+                            onClick={() => props.setOpen((state) => !state)}
+                        >
                             <i className="fas fa-bars"></i>
                         </button>
                         <Link
@@ -18,7 +21,10 @@ function Navbar({ ...props }) {
                             Parafrase ID
                         </Link>
                     </div>
-                    <div className="navbar-end duration-500">
+                    <div className="duration-500 navbar-end">
+                        <div className="hidden sm:inline-flex">
+                            <UpgradeButton />
+                        </div>
                         <div className="mx-2">
                             {user ? (
                                 <div className="dropdown dropdown-end">

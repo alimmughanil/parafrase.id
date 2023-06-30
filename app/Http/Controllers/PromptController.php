@@ -29,8 +29,8 @@ class PromptController extends Controller
 
         try {
             $promptHistory = $this->promptHistoryController->get($request);
-            if (!$promptHistory->isEmpty() && !auth()->check()) return redirect('/login')->with('message', 'Anda telah mencapai batas pemakaian, silahkan masuk menggunakan akun anda terlebih dahulu');
-            if (count($promptHistory) >= auth()->user()->limit) return redirect('/')->with('message', 'Anda telah mencapai batas pemakaian akun basic, silahkan upgrade akun anda terlebih dahulu');
+            // if (!$promptHistory->isEmpty() && !auth()->check()) return redirect('/login')->with('message', 'Anda telah mencapai batas pemakaian, silahkan masuk menggunakan akun anda terlebih dahulu');
+            // if (count($promptHistory) >= auth()->user()->limit) return redirect('/')->with('message', 'Anda telah mencapai batas pemakaian akun basic, silahkan upgrade akun anda terlebih dahulu');
 
             $prompt = Prompt::where('type', $request->type)->where('lang', $request->language)->first();
             if (!$prompt) return redirect('/')->with('message', 'Gagal membuat prompt');
@@ -68,6 +68,7 @@ class PromptController extends Controller
 
             return redirect('/')->with('result', $res);
         } catch (\Throwable $th) {
+            dd($th);
             return redirect('/')->with('message', 'Gagal membuat prompt');
         }
     }
