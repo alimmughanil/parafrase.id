@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import Navbar from "@/Components/Navbar";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import Sidebar from "@/Components/Sidebar";
 
 function HomeLayout({ title, children }) {
@@ -20,22 +20,22 @@ function HomeLayout({ title, children }) {
     const sidebarMenu = [
         {
             title: "Parafrase",
-            src: "fas fa-clipboard",
+            src: "fas fa-paragraph",
             link: "/?type=paraphrase",
         },
         {
             title: "Rangkuman",
-            src: "fas fa-clipboard",
+            src: "fas fa-align-left",
             link: "/?type=summerize",
         },
         {
             title: "Perbaikan",
-            src: "fas fa-clipboard",
+            src: `fas fa-spell-check ${!open ? "scale-[0.9]" : ""}`,
             link: "/?type=correction",
         },
         {
             title: "Terjemahkan",
-            src: "fas fa-clipboard",
+            src: `fas fa-language ${!open ? "scale-[0.85]" : ""}`,
             link: "/?type=translate",
         },
     ];
@@ -43,7 +43,7 @@ function HomeLayout({ title, children }) {
     return (
         <>
             <Head title={title} />
-            <div className={`flex-1`}>
+            <div className={`flex-1 relative`}>
                 <Navbar
                     setOpen={setOpen}
                     open={open}
@@ -51,15 +51,29 @@ function HomeLayout({ title, children }) {
                     link="/dashboard"
                     menu={sidebarMenu}
                 />
-                <div
-                    className={`flex flex-row w-full`}
-                >
-                    <Sidebar
-                        menu={sidebarMenu}
-                        open={open}
-                    />
-                    <div className={`bg-gray-200 ${open ? "hidden sm:flex sm:place-items-start w-full" : "flex-1"}`}>
+                <div className={`flex flex-row w-full`}>
+                    <Sidebar menu={sidebarMenu} open={open} />
+                    <div
+                        className={`bg-gray-200 ${
+                            open
+                                ? "hidden sm:flex sm:place-items-start w-full"
+                                : "flex-1"
+                        }`}
+                    >
                         {children}
+                        <div className="absolute bottom-0 px-4">
+                            <p className="text-sm text-gray-700">
+                                Disclaimer: Parafrase.ID merupakan tools yang
+                                dibuat dengan AI. kami tidak bertanggung jawab
+                                terkait hak cipta konten dalam bentuk apapun
+                                jika terdapat kemiripan dengan milik Anda.
+                            </p>
+                            <footer className="text-center">
+                                <Link href="/" className="link-hover">
+                                    parafrase.id
+                                </Link>
+                            </footer>
+                        </div>
                     </div>
                 </div>
             </div>

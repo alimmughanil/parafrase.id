@@ -4,6 +4,7 @@ import UpgradeButton from "./UpgradeButton";
 
 function Navbar({ ...props }) {
     const user = usePage().props.auth.user;
+    const role = user ? user.role : "guest";
     return (
         <>
             <div className="sticky top-0 left-0 z-[999]">
@@ -22,7 +23,11 @@ function Navbar({ ...props }) {
                         </Link>
                     </div>
                     <div className="duration-500 navbar-end">
-                        <div className="hidden sm:inline-flex">
+                        <div
+                            className={`hidden sm:inline-flex ${
+                                role == "admin" ? "sm:hidden" : ""
+                            }`}
+                        >
                             <UpgradeButton />
                         </div>
                         <div className="mx-2">
@@ -45,7 +50,7 @@ function Navbar({ ...props }) {
                                         className="p-2 mt-3 shadow dropdown-content bg-base-100 rounded-box w-max"
                                     >
                                         <li className="p-4 h-max">
-                                            <div className="flex flex-col items-center justify-center gap-y-6">
+                                            <div className="flex flex-col items-start justify-center gap-y-6">
                                                 <div className="flex flex-row items-start gap-x-3">
                                                     <div className="avatar">
                                                         <div className="w-10 h-10 border-2 rounded-full">
@@ -65,19 +70,27 @@ function Navbar({ ...props }) {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <div className="flex flex-row items-center justify-between w-full">
+                                                <div className="self-center w-full">
+                                                    <UpgradeButton
+                                                        show={true}
+                                                    />
+                                                </div>
+                                                <div className="flex flex-row items-center justify-around w-full">
                                                     <Link
                                                         className="text-gray-700 cursor-pointer hover:text-primary"
                                                         href="/"
                                                     >
                                                         <i className="fas fa-2x fa-home"></i>
                                                     </Link>
-                                                    <Link
-                                                        className="text-gray-700 cursor-pointer hover:text-primary"
-                                                        href={`/profile`}
-                                                    >
-                                                        <i className="fas fa-2x fa-gear"></i>
-                                                    </Link>
+                                                    {role == "admin" ? (
+                                                        <Link
+                                                            className="text-gray-700 cursor-pointer hover:text-primary"
+                                                            href="/dashboard"
+                                                        >
+                                                            <i className="fas fa-2x fa-tachometer-alt fa-fw"></i>
+                                                        </Link>
+                                                    ) : null}
+
                                                     <a
                                                         className="text-gray-700 cursor-pointer hover:text-primary"
                                                         href="#logout-confirm"

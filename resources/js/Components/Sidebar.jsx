@@ -1,8 +1,10 @@
 import LogoutModal from "@/Components/LogoutModal";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import UpgradeButton from "./UpgradeButton";
 
 function Sidebar(props) {
+    const user = usePage().props.auth.user;
+    const role = user ? user.role : "guest";
     return (
         <>
             <div
@@ -31,7 +33,7 @@ function Sidebar(props) {
                                         <i
                                             className={`${item.src}  ${
                                                 !props.open &&
-                                                "fa-2x duration-300 w-full"
+                                                "duration-300 w-full"
                                             }`}
                                         ></i>
                                         <span
@@ -46,7 +48,11 @@ function Sidebar(props) {
                                 </Link>
                             </li>
                         ))}
-                        <li className={`${!props.open ? "hidden" : ""}`}>
+                        <li
+                            className={`${
+                                !props.open || role == "admin" ? "hidden" : ""
+                            }`}
+                        >
                             <UpgradeButton />
                         </li>
                     </ul>

@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prompt_histories', function (Blueprint $table) {
+        Schema::create('configurations', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('user_id')->nullable();
-            $table->string('ip_address');
-            $table->longText('user_agent')->nullable();
-            $table->json('device')->nullable();
-            $table->longText('prompt_text');
-            $table->longText('result_text');
+            $table->string('type');
+            $table->string('value');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prompt_histories');
+        Schema::dropIfExists('configurations');
     }
 };

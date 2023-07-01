@@ -1,5 +1,4 @@
 import { Link, useForm } from "@inertiajs/react";
-import React from "react";
 
 function LogoutModal() {
     const { post, processing } = useForm();
@@ -19,13 +18,13 @@ function LogoutModal() {
                         Apakah anda yakin ingin keluar?
                     </h3>
                     <div className="modal-action">
-                        <a href="#" className="btn btn-outline">
+                        <a href="#" className="btn btn-outline btn-primary">
                             Tidak
                         </a>
                         <button
                             onClick={submit}
                             disabled={processing}
-                            className="btn"
+                            className="btn btn-primary"
                         >
                             Ya
                         </button>

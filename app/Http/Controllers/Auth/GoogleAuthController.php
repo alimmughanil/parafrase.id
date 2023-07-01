@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Services\User\UserService;
-use App\Providers\RouteServiceProvider;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
@@ -36,7 +35,6 @@ class GoogleAuthController extends Controller
             auth()->login($existUser, true);
             return redirect('/');
         } catch (\Throwable $th) {
-            dd($th);
             return redirect()->route('login');
         }
     }

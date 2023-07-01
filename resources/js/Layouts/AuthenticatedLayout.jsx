@@ -6,6 +6,9 @@ import VerifyEmail from "@/Components/VerifyEmail";
 import { Transition } from "@headlessui/react";
 
 function AuthenticatedLayout({ title, children, open, setOpen, auth }) {
+    const user = usePage().props.auth.user;
+    const role = user ? user.role : "guest";
+
     const flashMessage = usePage().props.flash.message;
     const [isFlash, setIsFlash] = useState(false);
 
@@ -17,19 +20,37 @@ function AuthenticatedLayout({ title, children, open, setOpen, auth }) {
             }, 3000);
         }
     }, [flashMessage]);
+    let sidebarMenu = [];
 
-    const sidebarMenu = [
-        {
-            title: "Dashboard",
-            src: "fas fa-tachometer-alt fa-fw",
-            link: "/dashboard",
-        },
-        {
-            title: "Event",
-            src: "fas fa-calendar-day",
-            link: "/event",
-        },
-    ];
+    if (role == "admin") {
+        sidebarMenu = [
+            {
+                title: "Dashboard",
+                src: "fas fa-tachometer-alt fa-fw",
+                link: "/dashboard",
+            },
+            {
+                title: "Users",
+                src: "fas fa-users",
+                link: "/users",
+            },
+            {
+                title: "Prompts",
+                src: "fas fa-list",
+                link: "/prompts",
+            },
+            {
+                title: "History",
+                src: "fas fa-clock-rotate-left",
+                link: "/history",
+            },
+            {
+                title: "Configuration",
+                src: "fas fa-gear",
+                link: "/configuration",
+            },
+        ];
+    }
 
     return (
         <div className="flex">

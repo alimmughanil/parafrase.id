@@ -6,14 +6,14 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 function Index(props) {
     const [openModal, setOpenModal] = useState(null);
-    const [eventData, setEventData] = useState([]);
+    const [userData, setUserData] = useState([]);
     const [open, setOpen] = useState(false);
     const [sortBy, setSortBy] = useState("id");
     const { delete: destroy, processing } = useForm();
 
     const handleDelete = (e) => {
         e.preventDefault();
-        destroy(`/event/${eventData.id}`);
+        destroy(`/users/${userData.id}`);
     };
     return (
         <AuthenticatedLayout
@@ -25,12 +25,12 @@ function Index(props) {
             {!openModal && (
                 <div className="flex flex-col items-center justify-center gap-4 mt-4">
                     <Link
-                        href="/event/create"
+                        href="/users/create"
                         className="btn btn-primary w-max btn-sm"
                     >
-                        Tambah Event
+                        Tambah Pengguna
                     </Link>
-                    <div className="relative overflow-x-auto">
+                    <div className="relative w-screen overflow-x-auto sm:w-full">
                         <table className="table w-full table-compact">
                             <thead className="">
                                 <tr>
@@ -60,41 +60,59 @@ function Index(props) {
                                     </th>
                                     <th scope="col" className="text-center">
                                         <button
-                                            onClick={() =>
-                                                setSortBy("date_time")
-                                            }
+                                            onClick={() => setSortBy("email")}
                                             className={`${
-                                                sortBy === "date_time"
+                                                sortBy === "email"
                                                     ? "bg-primary text-gray-100 px-2 rounded-lg font-normal"
                                                     : ""
                                             }`}
                                         >
-                                            Waktu
+                                            Email
                                         </button>
                                     </th>
                                     <th scope="col" className="text-center">
                                         <button
-                                            onClick={() => setSortBy("status")}
+                                            onClick={() => setSortBy("role")}
                                             className={`${
-                                                sortBy === "status"
+                                                sortBy === "role"
                                                     ? "bg-primary text-gray-100 px-2 rounded-lg font-normal"
                                                     : ""
                                             }`}
                                         >
-                                            Status
+                                            Role
+                                        </button>
+                                    </th>
+                                    <th scope="col" className="text-center">
+                                        <button
+                                            onClick={() => setSortBy("type")}
+                                            className={`${
+                                                sortBy === "type"
+                                                    ? "bg-primary text-gray-100 px-2 rounded-lg font-normal"
+                                                    : ""
+                                            }`}
+                                        >
+                                            Tipe
+                                        </button>
+                                    </th>
+                                    <th scope="col" className="text-center">
+                                        <button
+                                            onClick={() =>
+                                                setSortBy("created_at")
+                                            }
+                                            className={`${
+                                                sortBy === "created_at"
+                                                    ? "bg-primary text-gray-100 px-2 rounded-lg font-normal"
+                                                    : ""
+                                            }`}
+                                        >
+                                            Dibuat
                                         </button>
                                     </th>
                                     <th
                                         scope="col"
                                         className="text-center normal-case"
                                     >
-                                        Tiket Digital
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="text-center normal-case"
-                                    >
-                                        Tiket Fisik
+                                        Riwayat
                                     </th>
 
                                     <th
@@ -106,7 +124,7 @@ function Index(props) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {props.event.data.length == 0 ? (
+                                {props.users.data.length == 0 ? (
                                     <tr>
                                         <td
                                             colSpan={7}
@@ -119,15 +137,27 @@ function Index(props) {
                                         </td>
                                     </tr>
                                 ) : (
-                                    props.event.data
+                                    props.users.data
                                         .sort((a, b) => {
                                             if (sortBy == "name")
                                                 return a.name.localeCompare(
                                                     b.name
                                                 );
-                                            if (sortBy == "date_time")
-                                                return a.date_time.localeCompare(
-                                                    b.date_time
+                                            if (sortBy == "email")
+                                                return a.email.localeCompare(
+                                                    b.email
+                                                );
+                                            if (sortBy == "role")
+                                                return a.role.localeCompare(
+                                                    b.role
+                                                );
+                                            if (sortBy == "type")
+                                                return a.type.localeCompare(
+                                                    b.type
+                                                );
+                                            if (sortBy == "created_at")
+                                                return a.created_at.localeCompare(
+                                                    b.created_at
                                                 );
                                             if (sortBy == "status")
                                                 return a.status.localeCompare(
@@ -135,7 +165,7 @@ function Index(props) {
                                                 );
                                             return a.id - b.id;
                                         })
-                                        .map((event, i) => {
+                                        .map((user, i) => {
                                             return (
                                                 <tr
                                                     key={i}
@@ -151,14 +181,32 @@ function Index(props) {
                                                         scope="row"
                                                         className="text-center"
                                                     >
-                                                        {event.name}
+                                                        {user.name}
+                                                    </td>
+                                                    <td
+                                                        scope="row"
+                                                        className="text-center"
+                                                    >
+                                                        {user.email}
+                                                    </td>
+                                                    <td
+                                                        scope="row"
+                                                        className="text-center"
+                                                    >
+                                                        {user.role}
+                                                    </td>
+                                                    <td
+                                                        scope="row"
+                                                        className="text-center"
+                                                    >
+                                                        {user.type}
                                                     </td>
                                                     <td
                                                         scope="row"
                                                         className="text-center"
                                                     >
                                                         {new Date(
-                                                            event.date_time
+                                                            user.created_at
                                                         ).toLocaleString(
                                                             "id-ID",
                                                             {
@@ -171,64 +219,34 @@ function Index(props) {
                                                     </td>
                                                     <td
                                                         scope="row"
-                                                        className="text-center capitalize"
-                                                    >
-                                                        {event.status ==
-                                                        "active" ? (
-                                                            <div className="badge badge-sm badge-success badge-outline">
-                                                                {event.status}
-                                                            </div>
-                                                        ) : null}
-                                                        {event.status ==
-                                                        "nonactive" ? (
-                                                            <div className="badge badge-sm badge-error badge-outline">
-                                                                {event.status}
-                                                            </div>
-                                                        ) : null}
-                                                    </td>
-                                                    <td
-                                                        scope="row"
                                                         className="text-center"
                                                     >
-                                                        <div className="flex flex-col justify-center gap-2 items-center">
-                                                            <Link
-                                                                href={`/digital-ticket?event_id=${event.id}`}
-                                                                className="btn btn-xs btn-primary w-full"
-                                                            >
-                                                                Lihat
-                                                            </Link>
-                                                        </div>
-                                                    </td>
-                                                    <td
-                                                        scope="row"
-                                                        className="text-center"
-                                                    >
-                                                        <div className="flex flex-col justify-center gap-2 items-center">
-                                                            <Link
-                                                                href={`/physical-ticket?event_id=${event.id}`}
-                                                                className="btn btn-xs btn-primary w-full"
-                                                            >
-                                                                Lihat
-                                                            </Link>
-                                                        </div>
+                                                        <Link
+                                                            href={`/history/${user.id}`}
+                                                            className="text-lg text-blue-600 btn btn-ghost btn-sm"
+                                                        >
+                                                            Lihat
+                                                        </Link>
                                                     </td>
                                                     <td
                                                         scope="row"
                                                         className="text-center"
                                                     >
                                                         <Link
-                                                            href={`/event/${event.id}/edit`}
-                                                            className="text-lg text-blue-600 btn btn-ghost btn-sm btn-circle"
+                                                            href={`/users/${user.id}/edit`}
+                                                            className="text-lg text-blue-600 btn btn-outline btn-xs btn-circle"
                                                         >
-                                                            <i className="fas fa-edit"></i>
+                                                            <i className="fas fa-arrow-up"></i>
                                                         </Link>
                                                         <button
                                                             onClick={() => {
+                                                                props.flash.message =
+                                                                    null;
                                                                 setOpenModal(
                                                                     "delete"
                                                                 );
-                                                                setEventData(
-                                                                    event
+                                                                setUserData(
+                                                                    user
                                                                 );
                                                             }}
                                                             className="text-lg text-red-600 btn btn-ghost btn-sm btn-circle"
@@ -244,7 +262,7 @@ function Index(props) {
                         </table>
                         <div className="flex items-center justify-between w-full pt-2 pb-4">
                             <a
-                                href="/digital-ticket?show=all"
+                                href="/users?show=all"
                                 className={`${
                                     location.search == "?show=all"
                                         ? "bg-blue-200 rounded-lg"
@@ -253,10 +271,10 @@ function Index(props) {
                             >
                                 Show All
                             </a>
-                            {props.event.links ? (
+                            {props.users.links ? (
                                 <nav aria-label="Pagination of Index Report">
                                     <ul className="flex list-style-none">
-                                        {props.event.links.map((link, i) => {
+                                        {props.users.links.map((link, i) => {
                                             return (
                                                 <>
                                                     <li
@@ -265,7 +283,7 @@ function Index(props) {
                                                     >
                                                         <Link
                                                             className={`${
-                                                                props.event
+                                                                props.users
                                                                     .current_page ==
                                                                 link.label
                                                                     ? "bg-blue-200 rounded-lg"
@@ -277,7 +295,7 @@ function Index(props) {
                                                                     : link.url
                                                             }`}
                                                         >
-                                                           {link.label}
+                                                            {link.label}
                                                         </Link>
                                                     </li>
                                                 </>
@@ -287,7 +305,7 @@ function Index(props) {
                                 </nav>
                             ) : (
                                 <Link
-                                    href="/digital-ticket?page=1"
+                                    href="/users?page=1"
                                     className={`bg-transparent relative block rounded py-1.5 px-3 text-sm text-neutral-500 transition-all duration-300 dark:text-neutral-400`}
                                 >
                                     Page 1
@@ -301,13 +319,15 @@ function Index(props) {
                 <div className="flex items-center justify-center w-full gap-4 pt-8">
                     <form className="flex flex-col items-center justify-center w-full gap-4 p-4 border rounded-lg shadow-lg md:w-96">
                         <div className="">
-                            <p>Apakah anda yakin ingin menghapus event ini?</p>
+                            <p>
+                                Apakah anda yakin ingin menghapus pengguna ini?
+                            </p>
                             <p className="mt-4 font-bold text-center text-error">
                                 Perhatian!
                             </p>
                             <p className="text-sm text-center">
-                                Tiket digital dan tiket fisik yang berelasi
-                                dengan event ini juga akan terhapus
+                                Segala aktivitas pengguna ini juga akan ikut
+                                terhapus
                             </p>
                         </div>
                         {props.flash.message ? (

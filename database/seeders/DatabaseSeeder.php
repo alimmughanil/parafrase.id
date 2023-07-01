@@ -13,15 +13,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::create([
+        $admin = \App\Models\User::create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('rahasia123'),
             'remember_token' => Hash::make('secret123'),
             'role' => "admin",
+            'type' => 'administrator'
         ]);
 
-        \App\Models\User::create([
+        $user = \App\Models\User::create([
             'name' => 'Alim Mughanil',
             'email' => 'alim@gmail.com',
             'password' => Hash::make('rahasia123'),
@@ -95,6 +96,22 @@ class DatabaseSeeder extends Seeder
                     'to' => 'into'
                 ]
             ])
+        ]);
+
+        \App\Models\Configuration::create([
+            'type' => 'CHATGPT_SECRET_KEY',
+            'value' => env('CHATGPT_SECRET_KEY')
+        ]);
+        \App\Models\Configuration::create([
+            'type' => 'CHATGPT_SECRET_KEY',
+            'value' => env('CHATGPT_SECRET_KEY')
+        ]);
+        \App\Models\PromptHistory::create([
+            'user_id' => $user->id,
+            'ip_address' => '103.140.10.100',
+            'user_agent' => 'Mozilla/5.0 (Linux; Android 7.0; SM-G892A Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/60.0.3112.107 Mobile Safari/537.36',
+            'prompt_text' => 'Terjemahkan ini dari bahasa indonesia ke bahasa inggris: Bahasa pemrograman adalah cara untuk menuliskan instruksi yang akan diberikan kepada komputer. Banyak bahasa pemrograman berbasis teks, tetapi ada juga yang berbasis grafis. Deskripsi dari bahasa pemrograman biasanya dibagi menjadi dua bagian, yaitu sintaks dan semantik. Sintaks dan semantik didefinisikan dengan bahasa yang formal.',
+            'result_text' => 'Programming language is a way to write instructions to be given to the computer. Many programming languages are text-based, but some are graphical-based. The description of a programming language is usually divided into two parts, namely syntax and semantics. Syntax and semantics are defined in a formal language.',
         ]);
     }
 }

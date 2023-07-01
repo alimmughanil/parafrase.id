@@ -3,12 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Laravel\Sanctum\HasApiTokens;
+// use Illuminate\Database\Eloquent\Factories\HasFactory;
+// use Illuminate\Notifications\Notifiable;
 
+use App\Models\PromptHistory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -23,7 +24,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'type',
+        'status',
     ];
 
     /**
@@ -44,4 +47,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function promptHistory()
+    {
+        return $this->hasMany(PromptHistory::class, 'user_id', 'id');
+    }
 }

@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Link } from "@inertiajs/react";
-import React, { useState } from "react";
+import { useState } from "react";
 
 function Index(props) {
     const [open, setOpen] = useState(false);
@@ -18,8 +18,6 @@ function Index(props) {
                         {props.auth.user.name}
                     </span>
                 </p>
-
-
             </div>
         </AuthenticatedLayout>
     );
