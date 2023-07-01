@@ -2,7 +2,8 @@ import UpgradeButton from "@/Components/UpgradeButton";
 import HomeLayout from "@/Layouts/HomeLayout";
 import { Head, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import ReactCopy from "react-copy-to-clipboard";
+const { CopyToClipboard } = ReactCopy;
 
 export default function Welcome(props) {
     const [result, setResult] = useState(null);
