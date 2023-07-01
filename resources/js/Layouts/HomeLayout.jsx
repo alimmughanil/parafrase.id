@@ -56,13 +56,13 @@ function HomeLayout({ title, children }) {
                     <div
                         className={`bg-gray-200 ${
                             open
-                                ? "hidden sm:flex sm:place-items-start w-full"
-                                : "flex-1"
+                                ? "hidden sm:flex sm:flex-col sm:justify-between sm:items-center w-full"
+                                : "flex w-full flex-col justify-between items-center"
                         }`}
                     >
                         {children}
-                        <div className="absolute bottom-0 px-4">
-                            <p className="text-sm text-gray-700">
+                        <div className="relative px-4 my-4 ">
+                            <p className="text-sm text-gray-600">
                                 Disclaimer: Parafrase.ID merupakan tools yang
                                 dibuat dengan AI. kami tidak bertanggung jawab
                                 terkait hak cipta konten dalam bentuk apapun

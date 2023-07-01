@@ -51,7 +51,7 @@ function Navbar({ ...props }) {
                                     >
                                         <li className="p-4 h-max">
                                             <div className="flex flex-col items-start justify-center gap-y-6">
-                                                <div className="flex flex-row items-start gap-x-3">
+                                                <div className="flex flex-row items-start gap-x-3 overflow-auto w-[72vw] sm:w-80 scrollbar-hide">
                                                     <div className="avatar">
                                                         <div className="w-10 h-10 border-2 rounded-full">
                                                             <img
@@ -61,11 +61,11 @@ function Navbar({ ...props }) {
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="flex flex-col w-full">
-                                                        <div className="font-bold">
+                                                    <div className="flex flex-col">
+                                                        <div className="font-bold overflow-auto w-[60vw] sm:w-72 whitespace-pre scrollbar-hide">
                                                             {user.name}
                                                         </div>
-                                                        <p className="text-sm">
+                                                        <p className="text-sm overflow-auto w-[60vw] sm:w-72 whitespace-pre scrollbar-hide">
                                                             {user.email}
                                                         </p>
                                                     </div>
